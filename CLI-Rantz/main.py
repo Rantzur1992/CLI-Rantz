@@ -14,22 +14,22 @@ def report_failure(res):
     print(f"Request returned the following error: {error_message}")
 
 
-def get_instance_id(username, password):
-    url = f"{artifactory_url}/api/system/service_id"
+def get_instance_id(username, password, server_name):
+    url = f"https://{server_name}.jfrog.io/artifactory/api/system/service_id"
     res = req.get(url=url, auth=HTTPBasicAuth(username, password))
     if res.status_code == 200:
         return res.text
 
 
-def connect_user(username, password):
+def connect_user(username, password,server_name):
     #  Taking the default values of the access token to keep it simple.
     #  Setting the token as admin token for full access of requested endpoints.
     #  Token is created by default for 1 hour.
-    create_access_token = f"{artifactory_url}/api/security/token"
-    service_id = get_instance_id(username, password)
+    create_access_token = f"https://{server_name}.jfrog.io/artifactory/api/security/token"
+    service_id = get_instance_id(username, password, server_name)
     data = {"username" : username,
             'scope' : f"{service_id}:admin api:*"}
-    headers = {'Content-Type' : 'application/x-www-form-urlencoded'}
+    headers = {'Content-Type':'application/x-www-form-urlencoded'}
     res = req.post(url=create_access_token, data=data, headers=headers, auth=HTTPBasicAuth(username,password))
     if res.status_code == 200:
         access_token = res.json()['access_token']
@@ -38,20 +38,23 @@ def connect_user(username, password):
         report_failure(res.json())
         exit_cli()
 
+
 def exit_cli():
     sys.exit()
+
 
 # CLI-Rantz #
 @click.group()
 def cli():
     pass
 
+
 @cli.command(name= "version", help="Returns the system version. (Requires artifactory credentials)")
 @click.option('-username', required=True, prompt=True)
 @click.option('-password', required=True, prompt=True, hide_input=True)
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def get_system_version(username,password,server_name):
-    auth_token = connect_user(username, password)
+    auth_token = connect_user(username, password, server_name)
     system_version_url = f"https://{server_name}.jfrog.io/artifactory/api/system/version"
     res = req.get(url=system_version_url, auth=HTTPBasicAuth(username,auth_token))
     if res.status_code == 200:
@@ -60,6 +63,7 @@ def get_system_version(username,password,server_name):
     else:
         report_failure(res.json())
 
+
 @cli.command(name="ping", help="Returns the system health.")
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def system_ping(server_name):
@@ -67,12 +71,13 @@ def system_ping(server_name):
     res = req.get(url=system_ping_url)
     print(f"System ping returned: {res.text}")
 
+
 @cli.command(name="storage-info", help="Returns the storage information as a JSON value. (Requires artifactory credentials)")
 @click.option('-username', required=True, prompt=True, help="Artifactory user name")
 @click.option('-password', required=True, prompt=True, hide_input=True, help="Artifactory password")
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def get_storage_information(username, password, server_name):
-    auth_token = connect_user(username, password)
+    auth_token = connect_user(username, password, server_name)
     url = f"https://{server_name}.jfrog.io/artifactory/api/storageinfo"
     res = req.get(url=url, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 200:
@@ -80,6 +85,7 @@ def get_storage_information(username, password, server_name):
         pprint(res.json())
     else:
         report_failure(res.json())
+
 
 @cli.command(name="create-user", help="Creates a new user. (requires artifactory credentials)")
 @click.option('-username', required=True, prompt=True, help="Artifactory user name")
@@ -99,7 +105,7 @@ def create_user(username, password,name,email,
                 new_pass, is_admin, profile_updatable,
                 disable_ui, password_protected, groups,
                 watch_manager, policy_manager, server_name):
-    auth_token = connect_user(username, password)
+    auth_token = connect_user(username, password, server_name)
     header = {'Content-Type': 'application/json'}
     url = f"https://{server_name}.jfrog.io/artifactory/api/security/users/{name}"
     data = {'name': name,
@@ -118,6 +124,7 @@ def create_user(username, password,name,email,
     else:
         report_failure(res.json())
 
+
 @cli.command(name="delete-user", help="Deletes a user. (requires artifactory credentials)")
 @click.option('-username', required=True, prompt=True, help="Artifactory user name")
 @click.option('-password', required=True, prompt=True, hide_input=True, help="Artifactory password")
@@ -131,6 +138,7 @@ def delete_user(username, password, user_to_delete,server_name):
         print(f"User '{user_to_delete}' was deleted successfully")
     else:
         report_failure(res.json())
+
 
 if __name__ == '__main__':
     cli()

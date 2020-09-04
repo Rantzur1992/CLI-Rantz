@@ -8,4 +8,4 @@ $ pip install CLI-Rantz
 
 <b>This uses f literals thus requires python 3</b><br>
 
-To see how to use the CLI, do python3 main.py --help
+To see how to use the CLI, do python main.py --help
