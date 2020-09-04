@@ -1,13 +1,12 @@
 #
 # CLI-Rantz POC for JFrog Tech review - created by Ran Tzur.
 #
-artifactory_url = "https://rantz.jfrog.io/artifactory"
-selection_options = ["1", "2", "3", "4", "5", "6"]
 import requests as req
 from requests.auth import HTTPBasicAuth
 import sys
 from pprint import pprint
-import click, json
+import click
+import json
 
 
 def report_failure(res):
@@ -20,6 +19,7 @@ def get_instance_id(username, password):
     res = req.get(url=url, auth=HTTPBasicAuth(username, password))
     if res.status_code == 200:
         return res.text
+
 
 def connect_user(username, password):
     #  Taking the default values of the access token to keep it simple.
