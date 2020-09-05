@@ -1,6 +1,6 @@
-#
+
 # CLI-Rantz POC for JFrog Tech review - created by Ran Tzur.
-#
+# !/usr/bin/env python3
 import requests as req
 from requests.auth import HTTPBasicAuth
 import sys
