@@ -10,7 +10,7 @@ pip install CLI-Rantz  -i  https://rantz.jfrog.io/artifactory/api/pypi/pypi-loca
 
 Or use:<br>
 ```sh
-pip install  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/CLI-Rantz/0.1/CLI-Rantz-0.1.tar.gz
+pip install  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/CLI-Rantz/0.1/CLI-Rantz-0.2.tar.gz
 ```
 
 Or download from Pypi:<br>
