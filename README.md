@@ -1,10 +1,17 @@
 Technical Exam for JFrog by Ran Tzur.<br>
 A CLI for Artifactory built in python.<br>
-Install using:
+
+<b>Install using:</b>
 
 ```sh
 $ pip install CLI-Rantz
 ```
+
+<b>Or install by using the Artifactory Saas instance</b><br>
+```sh
+$ pip install CLI-Rantz -i https://rantz.jfrog.io/artifactory/api/pypi/jfrog-exam/simple
+```
+
 
 <b>This uses f literals thus requires python3</b><br>
 
@@ -12,6 +19,8 @@ First navigate to where the package installation is on your local machine(Where 
 After that, to see how to use the CLI, do python(or python3 if you are not using pycharm terminal) main.py --help<br>
 [![example-1.png](https://i.postimg.cc/9f3VMzPK/example-1.png)](https://postimg.cc/FYxwCrBV)
 <br>
+
+You can also use --help on specific commands, for example:
 
 [![example-2.png](https://i.postimg.cc/7P2h5cfc/example-2.png)](https://postimg.cc/NLQBVd87)
 <br>
