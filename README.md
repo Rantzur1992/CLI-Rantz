@@ -33,6 +33,11 @@ You can also use --help on specific commands, for example:
 [![example-2.png](https://i.postimg.cc/7P2h5cfc/example-2.png)](https://postimg.cc/NLQBVd87)
 <br>
 
+Full example of a command which creates a new user:<br>
+```sh
+$ python3 jfrog-cli.py create-user -name=anotherone -email=fake@test.io -new-pass=something12345
+```
+
 <b>Please note this will work ONLY on the SaaS artifactory</b><br>
 <b>You will need to specify your artifactory server name for each command</b><br>
 [![example-3.png](https://i.postimg.cc/15MQXcc2/example-3.png)](https://postimg.cc/TpySHbsJ)
