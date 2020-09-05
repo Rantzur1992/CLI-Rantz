@@ -10,8 +10,12 @@ import json
 
 
 def report_failure(res):
-    error_message = res['errors'][0]['message']
-    print(f"Request returned the following error: {error_message}")
+    try:
+        error_message = res['errors'][0]['message']
+        print(f"Request returned the following error: {error_message}")
+    except Exception as e:
+        print("Request failed, error message is " + e)
+        raise SystemError()
 
 
 def get_instance_id(username, password, server_name):
