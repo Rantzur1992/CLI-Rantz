@@ -14,8 +14,8 @@ def report_failure(res):
         error_message = res['errors'][0]['message']
         print(f"Request returned the following error: {error_message}")
     except Exception as e:
-        print("Request failed, error message is " + e)
-        raise SystemError()
+        print("Request failed, error message is " + str(e))
+        raise SystemExit()
 
 
 def get_instance_id(username, password, server_name):
@@ -39,8 +39,12 @@ def connect_user(username, password,server_name):
         access_token = res.json()['access_token']
         return access_token
     else:
-        report_failure(res.json())
-        exit_cli()
+        try:
+            report_failure(res.json())
+            exit_cli()
+        except Exception as e:
+            print("Failed to parse result from endpoint, please double check your server name")
+            raise SystemExit()
 
 
 def exit_cli():
