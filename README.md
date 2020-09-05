@@ -18,6 +18,8 @@ Or download from Pypi:<br>
 $ pip install CLI-Rantz
 ```
 
+It is recommanded to use -t flag on the pip install to set the path of the installation.
+
 
 <b>This uses f literals thus requires python3</b><br>
 
