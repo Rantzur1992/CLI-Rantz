@@ -1,9 +1,19 @@
 Technical Exam for JFrog by Ran Tzur.<br>
 A CLI for Artifactory built in python.<br>
 
-<b>Install by using the Artifactory Saas instance</b><br>
+<b>Install by using the Artifactory Saas instance:</b><br>
 ```sh
 pip install CLI-Rantz  -i  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/simple
+```
+
+Or use:<br>
+```sh
+pip install  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/CLI-Rantz/0.1/CLI-Rantz-0.1.tar.gz
+```
+
+Or download from Pypi:<br>
+```sh
+$ pip install CLI-Rantz
 ```
 
 
