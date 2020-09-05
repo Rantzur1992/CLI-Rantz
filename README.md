@@ -9,7 +9,7 @@ $ pip install CLI-Rantz
 
 <b>Or install by using the Artifactory Saas instance</b><br>
 ```sh
-$ pip install CLI-Rantz -i https://rantz.jfrog.io/artifactory/api/pypi/jfrog-exam/simple
+pip install CLI-Rantz  -i  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/simple
 ```
 
 
