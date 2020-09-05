@@ -15,7 +15,7 @@ def report_failure(res):
 
 
 def get_instance_id(username, password, server_name):
-    url = f"https://{server_name}.jfrog.io/artifactory/api/system/service_id"
+    url = build_url(server_name, 'api/system/service_id')
     res = req.get(url=url, auth=HTTPBasicAuth(username, password))
     if res.status_code == 200:
         return res.text
@@ -25,11 +25,11 @@ def connect_user(username, password,server_name):
     #  Taking the default values of the access token to keep it simple.
     #  Setting the token as admin token for full access of requested endpoints.
     #  Token is created by default for 1 hour.
-    create_access_token = f"https://{server_name}.jfrog.io/artifactory/api/security/token"
+    create_access_token = build_url(server_name, 'api/security/token')
     service_id = get_instance_id(username, password, server_name)
-    data = {"username" : username,
-            'scope' : f"{service_id}:admin api:*"}
-    headers = {'Content-Type':'application/x-www-form-urlencoded'}
+    data = {"username": username,
+            'scope': f"{service_id}:admin api:*"}
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     res = req.post(url=create_access_token, data=data, headers=headers, auth=HTTPBasicAuth(username,password))
     if res.status_code == 200:
         access_token = res.json()['access_token']
@@ -41,6 +41,18 @@ def connect_user(username, password,server_name):
 
 def exit_cli():
     sys.exit()
+
+
+def build_url(server_name, api_path):
+    try:
+        url = f"https://{server_name}.jfrog.io/artifactory/{api_path}"
+        #  This check for a valid server_name, will throw an invalid exception if server_name is not SaaS
+        req.get(url=f"https://{server_name}.jfrog.io/artifactory/system/ping")
+        return url
+    except Exception as e:
+        print("Failed to parse URL, please make sure you are using your SaaS username.\n"
+              "For examples, see GitHub Readme.")
+        raise SystemExit()
 
 
 # CLI-Rantz #
@@ -55,8 +67,8 @@ def cli():
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def get_system_version(username,password,server_name):
     auth_token = connect_user(username, password, server_name)
-    system_version_url = f"https://{server_name}.jfrog.io/artifactory/api/system/version"
-    res = req.get(url=system_version_url, auth=HTTPBasicAuth(username,auth_token))
+    system_version_url = build_url(server_name, 'api/system/version')
+    res = req.get(url=system_version_url, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 200:
         output = res.json()['version']
         print(f"\nSystem version: {output}\n")
@@ -67,7 +79,7 @@ def get_system_version(username,password,server_name):
 @cli.command(name="ping", help="Returns the system health.")
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def system_ping(server_name):
-    system_ping_url = f"https://{server_name}.jfrog.io/artifactory/api/system/ping"
+    system_ping_url = build_url(server_name, 'api/system/ping')
     res = req.get(url=system_ping_url)
     print(f"System ping returned: {res.text}")
 
@@ -78,7 +90,7 @@ def system_ping(server_name):
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def get_storage_information(username, password, server_name):
     auth_token = connect_user(username, password, server_name)
-    url = f"https://{server_name}.jfrog.io/artifactory/api/storageinfo"
+    url = build_url(server_name, 'api/storageinf')
     res = req.get(url=url, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 200:
         print("\nSystem Storage Information: \n-------------------------------\n")
@@ -107,7 +119,7 @@ def create_user(username, password,name,email,
                 watch_manager, policy_manager, server_name):
     auth_token = connect_user(username, password, server_name)
     header = {'Content-Type': 'application/json'}
-    url = f"https://{server_name}.jfrog.io/artifactory/api/security/users/{name}"
+    url = build_url(server_name, f"api/security/users/{name}")
     data = {'name': name,
             'email': email,
             'password': new_pass,
@@ -120,7 +132,7 @@ def create_user(username, password,name,email,
             'policyManager': policy_manager}
     res = req.put(url=url, data=json.dumps(data),headers=header, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 201:
-        print(f"User '{name}' was created successfully")
+        print(f"User {name} was created successfully")
     else:
         report_failure(res.json())
 
@@ -135,7 +147,7 @@ def delete_user(username, password, user_to_delete,server_name):
     auth_token = connect_user(username, password)
     res = req.delete(url=url, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 200:
-        print(f"User '{user_to_delete}' was deleted successfully")
+        print(f"User {user_to_delete} was deleted successfully")
     else:
         report_failure(res.json())
 
