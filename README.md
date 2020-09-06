@@ -8,11 +8,6 @@ Password: jfrogexam123
 pip install CLI-Rantz  -i  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/simple
 ```
 
-Or use:<br>
-```sh
-pip install  https://rantz.jfrog.io/artifactory/api/pypi/pypi-local/CLI-Rantz/0.1/CLI-Rantz-0.4.tar.gz
-```
-
 It is recommanded to use -t flag on the pip install to set the path of the installation.
 
 
