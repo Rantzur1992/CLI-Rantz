@@ -152,7 +152,7 @@ def create_user(username, password,name,email,
 @click.option('-server-name', required=True, prompt=True, help="Artifactory server name")
 def delete_user(username, password, user_to_delete,server_name):
     url = f"https://{server_name}.jfrog.io/artifactory/api/security/users/{user_to_delete}"
-    auth_token = connect_user(username, password)
+    auth_token = connect_user(username, password,server_name)
     res = req.delete(url=url, auth=HTTPBasicAuth(username, auth_token))
     if res.status_code == 200:
         print(f"User {user_to_delete} was deleted successfully")
