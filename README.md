@@ -14,7 +14,7 @@ It is recommanded to use -t flag on the pip install to set the path of the insta
 <b>This uses f literals thus requires python3</b><br>
 
 First navigate to where the package installation is on your local machine(Where pip installs the script)<br>
-After that, to see how to use the CLI, do python(or python3 if you are not using pycharm terminal) main.py --help<br>
+After that, to see how to use the CLI, do python jfrog-cli.py --help<br>
 [![example-1.png](https://i.postimg.cc/9f3VMzPK/example-1.png)](https://postimg.cc/FYxwCrBV)
 <br>
 
